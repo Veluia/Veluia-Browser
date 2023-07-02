@@ -1,0 +1,13 @@
+{
+  "ui:order": [
+    "webExtension",
+    "default",
+    "defaultPrivate",
+    "orderHint",
+    "sendAttributionRequest",
+    "telemetryId",
+    "params",
+    "extraParams",
+    "appliesTo"
+  ]
+}

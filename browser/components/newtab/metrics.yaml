@@ -1,0 +1,571 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Adding a new metric? We have docs for that!
+# https://firefox-source-docs.mozilla.org/toolkit/components/glean/user/new_definitions_file.html
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+$tags:
+  - 'Firefox :: New Tab Page'
+
+newtab:
+  locale:
+    type: string
+    description: >
+      The application's locale as of when newtab's TelemetryFeed was init.
+      Comes from `Services.local.appLocaleAsBCP47`.
+      Looks like `en-US`.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1766887
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786670
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1766887
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786670#c3
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105#c11
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - anicholson@mozilla.com
+      - chutten@mozilla.com
+      - mmccorquodale@mozilla.com
+      - najiang@mozilla.com
+      - lina@mozilla.com
+    expires: never
+    send_in_pings:
+      - newtab
+    lifetime: application
+
+  newtab_category:
+    type: string
+    description: >
+      The current setting of the newtab page.
+      One of ["enabled", "disabled", "extension"] or any value from
+      SiteClassifier like "known-hijacker" or "social-media".
+      Similar to Activity Stream's PAGE_TAKEOVER_DATA event's
+      `newtab_url_category`.
+      Sampled once after newtab init.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105#c11
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - anicholson@mozilla.com
+      - chutten@mozilla.com
+      - mmccorquodale@mozilla.com
+      - najiang@mozilla.com
+      - lina@mozilla.com
+    expires: never
+    send_in_pings:
+      - newtab
+    lifetime: application
+
+  homepage_category:
+    type: string
+    description: >
+      The current setting of the home page.
+      One of ["enabled", "disabled", "extension"] or any value from
+      SiteClassifier like "known-hijacker" or "social-media".
+      Similar to Activity Stream's PAGE_TAKEOVER_DATA event's
+      `home_url_category`.
+      Sampled once after newtab init.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105#c11
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - anicholson@mozilla.com
+      - chutten@mozilla.com
+      - mmccorquodale@mozilla.com
+      - najiang@mozilla.com
+      - lina@mozilla.com
+    expires: never
+    send_in_pings:
+      - newtab
+    lifetime: application
+
+  opened:
+    type: event
+    description: >
+      Recorded when newtab UI is opened via `about:newtab` or `about:home` or
+      `about:welcome` and has been made visible (see `visibility_event_rcvd_ts`
+      in
+      [detect-user-session-start.js](https://searchfox.org/mozilla-central/source/browser/components/newtab/content-src/lib/detect-user-session-start.js)).
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1766887
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786670
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1766887
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786670#c3
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105#c11
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - anicholson@mozilla.com
+      - chutten@mozilla.com
+      - mmccorquodale@mozilla.com
+      - najiang@mozilla.com
+      - lina@mozilla.com
+    expires: never
+    extra_keys:
+      newtab_visit_id: &newtab_visit_id
+        description: >
+          The id of this newtab visit.
+          Allows you to separate multiple simultaneous newtabs and
+          build an event timeline of actions taken from this newtab.
+        type: string
+      source:
+        description: >
+          The source that opened this newtab.
+          One of
+            * `about:newtab`
+            * `about:home`
+            * `about:welcome`
+            * `other`
+          (See `ONBOARDING_ALLOWED_PAGE_VALUES`).
+        type: string
+    send_in_pings:
+      - newtab
+
+  closed:
+    type: event
+    description: >
+      Recorded when newtab UI is closed by
+      * navigation
+      * closing the tab
+
+      Doesn't mean that the newtab was ever visible to a user.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1766887
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786670
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1766887
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786670#c3
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105#c11
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - anicholson@mozilla.com
+      - chutten@mozilla.com
+      - mmccorquodale@mozilla.com
+      - najiang@mozilla.com
+      - lina@mozilla.com
+    expires: never
+    extra_keys:
+      newtab_visit_id: *newtab_visit_id
+    send_in_pings:
+      - newtab
+  blocked_sponsors:
+    type: string_list
+    description: >
+      The advertiser names that have been dismissed by the user.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1828234
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1828234#c1
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - anicholson@mozilla.com
+      - chutten@mozilla.com
+      - mmccorquodale@mozilla.com
+      - najiang@mozilla.com
+      - lina@mozilla.com
+      - ttran@mozilla.com
+    expires: never
+    send_in_pings:
+      - newtab
+    lifetime: application
+
+newtab.search:
+  enabled:
+    lifetime: application
+    type: boolean
+    description: >
+      Whether the search input is enabled on the newtab.
+      Corresponds to the value of the
+      `browser.newtabpage.activity-stream.showSearch` pref.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105#c11
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - anicholson@mozilla.com
+      - chutten@mozilla.com
+      - mmccorquodale@mozilla.com
+      - najiang@mozilla.com
+      - lina@mozilla.com
+    expires: never
+    send_in_pings:
+      - newtab
+
+topsites:
+  enabled:
+    lifetime: application
+    type: boolean
+    description: >
+      Whether "topsites" is enabled on the newtab.
+      AKA the "Shortcuts" section.
+      Corresponds to the value of the
+      `browser.newtabpage.activity-stream.feeds.topsites` pref.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105#c11
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - anicholson@mozilla.com
+      - chutten@mozilla.com
+      - mmccorquodale@mozilla.com
+      - najiang@mozilla.com
+      - lina@mozilla.com
+    expires: never
+    send_in_pings:
+      - newtab
+
+  sponsored_enabled:
+    lifetime: application
+    type: boolean
+    description: >
+      Whether sponsored topsites are enabled on the newtab.
+      AKA the "Sponsored Shortcuts" section.
+      Corresponds to the value of the
+      `browser.newtabpage.activity-stream.showSponsoredTopSites` pref.
+      Can be `true` even if topsites.enabled is `false`.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105#c11
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - anicholson@mozilla.com
+      - chutten@mozilla.com
+      - mmccorquodale@mozilla.com
+      - najiang@mozilla.com
+      - lina@mozilla.com
+    expires: never
+    send_in_pings:
+      - newtab
+
+  impression:
+    type: event
+    description: >
+      Recorded when topsite tiles are loaded.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1766887
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786670
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1820707
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1766887
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786670#c3
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105#c11
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1820707#c3
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1821556#c3
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1824842#c7
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - anicholson@mozilla.com
+      - chutten@mozilla.com
+      - mmccorquodale@mozilla.com
+      - najiang@mozilla.com
+      - lina@mozilla.com
+    expires: never
+    extra_keys:
+      advertiser_name: &advertiser_name
+        description: >
+          The name of the advertiser of the tile
+        type: string
+      tile_id: &tile_id
+        description: >
+          The tile id of the advertiser provided by Contile
+        type: string
+      newtab_visit_id: *newtab_visit_id
+      is_sponsored: &is_sponsored
+        description: Whether the topsite tile was sponsored.
+        type: boolean
+      position: &topsite_position
+        description: The position (0-index) of the topsite tile.
+        type: quantity
+    send_in_pings:
+      - newtab
+
+  click:
+    type: event
+    description: >
+      Recorded when a topsite tile is clicked.
+      Only happens on click. Not on middle-click. Not on "Open in new Tab"-like
+      options in the context menu.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1766887
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786670
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1820707
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1766887
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786670#c3
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105#c11
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1820707#c3
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1821556#c3
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1824842#c7
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - anicholson@mozilla.com
+      - chutten@mozilla.com
+      - mmccorquodale@mozilla.com
+      - najiang@mozilla.com
+      - lina@mozilla.com
+    expires: never
+    extra_keys:
+      advertiser_name: *advertiser_name
+      tile_id: *tile_id
+      newtab_visit_id: *newtab_visit_id
+      is_sponsored: *is_sponsored
+      position: *topsite_position
+    send_in_pings:
+      - newtab
+
+  rows:
+    lifetime: application
+    type: quantity
+    unit: integer
+    description: >
+      The number of topsite tile rows configured to be shown on the newtab
+      page. Corresponds to the value of the
+      `browser.newtabpage.activity-stream.topSitesRows` pref. This is not the
+      number of rows actually seen by the user: if the browser window is
+      partially off-screen, or isn't wide enough to accommodate eight tiles per
+      row, the actual number of rows may be different.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1821556
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1821556#c3
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - anicholson@mozilla.com
+      - chutten@mozilla.com
+      - mmccorquodale@mozilla.com
+      - najiang@mozilla.com
+      - lina@mozilla.com
+    expires: never
+    send_in_pings:
+      - newtab
+
+pocket:
+  is_signed_in:
+    lifetime: application
+    type: boolean
+    description: >
+      Whether the Firefox user is signed in to Pocket.
+      Does not correspond to a pref, so its value is resampled at newtab's
+      component init and whenever there is a Discovery Stream user event.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105#c11
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - anicholson@mozilla.com
+      - chutten@mozilla.com
+      - mmccorquodale@mozilla.com
+      - najiang@mozilla.com
+      - lina@mozilla.com
+    expires: never
+    send_in_pings:
+      - newtab
+
+  enabled:
+    lifetime: application
+    type: boolean
+    description: >
+      Whether Pocket is enabled on the newtab.
+      AKA the "Recommended by Pocket" section.
+      Corresponds to the value of the
+      `browser.newtabpage.activity-stream.feeds.section.topstories` pref.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105#c11
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - anicholson@mozilla.com
+      - chutten@mozilla.com
+      - mmccorquodale@mozilla.com
+      - najiang@mozilla.com
+      - lina@mozilla.com
+    expires: never
+    send_in_pings:
+      - newtab
+
+  sponsored_stories_enabled:
+    lifetime: application
+    type: boolean
+    description: >
+      Whether Pocket sponsored stories are enabled on the newtab.
+      Corresponds to the value of the
+      `browser.newtabpage.activity-stream.showSponsored` pref.
+      Can be `true` even if pocket.enabled is `false`.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105#c11
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - anicholson@mozilla.com
+      - chutten@mozilla.com
+      - mmccorquodale@mozilla.com
+      - najiang@mozilla.com
+      - lina@mozilla.com
+    expires: never
+    send_in_pings:
+      - newtab
+
+  impression:
+    type: event
+    description: >
+      Recorded when a pocket tile is visible to the user.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105#c11
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - anicholson@mozilla.com
+      - chutten@mozilla.com
+      - mmccorquodale@mozilla.com
+      - najiang@mozilla.com
+      - lina@mozilla.com
+    expires: never
+    extra_keys:
+      newtab_visit_id: *newtab_visit_id
+      is_sponsored: &is_sponsored_pocket
+        description: Whether the pocket tile was sponsored (has an ad shim).
+        type: boolean
+      position: &pocket_position
+        description: The position (0-index) of the pocket tile.
+        type: quantity
+    send_in_pings:
+      - newtab
+
+  click:
+    type: event
+    description: >
+      Recorded when a pocket tile is clicked.
+      Only happens on click. Not on middle-click. Not on "Open in new Tab"-like
+      options in the context menu.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105#c11
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - anicholson@mozilla.com
+      - chutten@mozilla.com
+      - mmccorquodale@mozilla.com
+      - najiang@mozilla.com
+      - lina@mozilla.com
+    expires: never
+    extra_keys:
+      newtab_visit_id: *newtab_visit_id
+      is_sponsored: *is_sponsored_pocket
+      position: *pocket_position
+    send_in_pings:
+      - newtab
+
+  save:
+    type: event
+    description: >
+      Recorded when a user decides to save a pocket tile.
+      Does not mean it ends up successfully saved.
+      Just that the user clicked on "Save to Pocket" in the little pocket
+      tile menu.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105#c11
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - anicholson@mozilla.com
+      - chutten@mozilla.com
+      - mmccorquodale@mozilla.com
+      - najiang@mozilla.com
+      - lina@mozilla.com
+    expires: never
+    extra_keys:
+      newtab_visit_id: *newtab_visit_id
+      is_sponsored: *is_sponsored_pocket
+      position: *pocket_position
+    send_in_pings:
+      - newtab
+
+  topic_click:
+    type: event
+    description: >
+      Recorded when a pocket "Popular Topic" is clicked.
+      Only happens on click. Not on middle-click. Not on "Open in new Tab"-like
+      options in the context menu.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1786612
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1817105#c11
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - anicholson@mozilla.com
+      - chutten@mozilla.com
+      - mmccorquodale@mozilla.com
+      - najiang@mozilla.com
+      - lina@mozilla.com
+    expires: never
+    extra_keys:
+      newtab_visit_id: *newtab_visit_id
+      topic:
+        description: The topic that was clicked on. Like "entertainment".
+        type: string
+    send_in_pings:
+      - newtab
