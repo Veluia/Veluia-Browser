@@ -8,10 +8,10 @@
 
 # BrandFullNameInternal is used for some registry and file system values
 # instead of BrandFullName and typically should not be modified.
-!define BrandFullNameInternal "Mozilla Developer Preview"
-!define BrandFullName         "Mozilla Developer Preview"
-!define CompanyName           "mozilla.org"
-!define URLInfoAbout          "https://www.mozilla.org"
+!define BrandFullNameInternal "Veluia Browser Preview"
+!define BrandFullName         "Veluia Browser Preview"
+!define CompanyName           "Veluia Browser Community"
+!define URLInfoAbout          "https://www.veluia.com"
 !define HelpLink              "https://support.mozilla.org"
 
 !define URLStubDownloadX86 "https://download.mozilla.org/?os=win&lang=${AB_CD}&product=firefox-latest"
@@ -22,7 +22,7 @@
 !define Channel "unofficial"
 
 # The installer's certificate name and issuer expected by the stub installer
-!define CertNameDownload   "Mozilla Corporation"
+!define CertNameDownload   "Veluia Community Project"
 !define CertIssuerDownload "DigiCert SHA2 Assured ID Code Signing CA"
 
 # Dialog units are used so the UI displays correctly with the system's DPI
